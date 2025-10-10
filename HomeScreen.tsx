@@ -10,26 +10,33 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
+import {
+  Film,
+  Folder,
+  Image as ImageIcon,
+  StickyNote,
+} from 'lucide-react-native';
 
 /*
  ** Color tokens (cinematic theme)
  */
 const COLORS = {
-  primary: '#E43636', // red
-  cream: '#F6EFD2',
-  gold: '#E2DDB4',
-  black: '#000000',
+  primary: '#BF092F', // bold red
+  secondary: '#132440', // deep navy background
+  accent: '#16476A', // ocean blue accent
+  highlight: '#3B9797', // teal highlight
   white: '#FFFFFF',
+  black: '#000000',
 };
 
 /*
  ** Mock data (since there is no backend). Replace with real local queries later.
  */
 const FEATURE_CARDS = [
-  { key: 'all', title: 'All Videos', emoji: '🎥', count: 23 },
-  { key: 'folders', title: 'Folders', emoji: '📁', count: 8 },
-  { key: 'photos', title: 'Photos', emoji: '🖼️', count: 156 },
-  { key: 'notes', title: 'Notes', emoji: '📝', count: 12 },
+  { key: 'all', title: 'All Videos', icon: Film, count: 23 },
+  { key: 'folders', title: 'Folders', icon: Folder, count: 8 },
+  { key: 'photos', title: 'Photos', icon: ImageIcon, count: 156 },
+  { key: 'notes', title: 'Notes', icon: StickyNote, count: 12 },
 ];
 
 const FILTERS = ['All Videos', 'Folders', 'Photos', 'Notes'] as const;
@@ -71,12 +78,16 @@ function Chip({
 
 function FeatureCard({
   title,
-  emoji,
+  icon: Icon,
   count,
   onPress,
 }: {
   title: string;
-  emoji: string;
+  icon: React.ComponentType<{
+    color?: string;
+    size?: number;
+    strokeWidth?: number;
+  }>;
   count?: number;
   onPress?: () => void;
 }) {
@@ -91,7 +102,7 @@ function FeatureCard({
           <Text style={styles.badgeText}>{count}</Text>
         </View>
       )}
-      <Text style={styles.cardEmoji}>{emoji}</Text>
+      <Icon color={COLORS.primary} size={32} strokeWidth={2.2} />
       <Text style={styles.cardTitle}>{title}</Text>
     </Pressable>
   );
@@ -183,7 +194,7 @@ const HomeScreen = () => {
             <FeatureCard
               key={card.key}
               title={card.title}
-              emoji={card.emoji}
+              icon={card.icon}
               count={card.count}
             />
           ))}
@@ -220,7 +231,7 @@ const HomeScreen = () => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.black },
+  safe: { flex: 1, backgroundColor: COLORS.secondary },
   container: { padding: 16, paddingBottom: 40 },
 
   /* Header */
@@ -230,24 +241,26 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   title: {
-    color: COLORS.cream,
+    color: COLORS.primary,
     fontSize: 20,
     fontWeight: '700',
   },
   subtitle: {
-    color: COLORS.gold,
+    color: COLORS.highlight,
     fontSize: 12,
     marginTop: 4,
   },
   settingsBtn: { position: 'absolute', right: 0, top: 0, padding: 8 },
-  settingsIcon: { fontSize: 18, color: COLORS.gold },
+  settingsIcon: { fontSize: 18, color: COLORS.highlight },
 
   /* Search */
   searchWrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.cream,
+    backgroundColor: COLORS.white,
     borderRadius: 12,
+    borderWidth: 1,
+    borderColor: COLORS.accent,
     paddingHorizontal: 12,
     paddingVertical: 10,
     marginTop: 8,
@@ -263,11 +276,11 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     borderWidth: 1,
   },
-  chipInactive: { borderColor: COLORS.gold, backgroundColor: 'transparent' },
+  chipInactive: { borderColor: COLORS.accent, backgroundColor: 'transparent' },
   chipActive: { borderColor: COLORS.primary, backgroundColor: COLORS.primary },
   chipText: { fontSize: 12 },
-  chipTextInactive: { color: COLORS.gold },
-  chipTextActive: { color: COLORS.cream },
+  chipTextInactive: { color: COLORS.highlight },
+  chipTextActive: { color: COLORS.white },
 
   /* Cards grid */
   grid: {
@@ -280,14 +293,15 @@ const styles = StyleSheet.create({
     width: '48%',
     height: 120,
     borderRadius: 16,
-    backgroundColor: COLORS.cream,
+    backgroundColor: COLORS.white,
+    borderWidth: 1,
+    borderColor: COLORS.accent,
     overflow: 'hidden',
     padding: 16,
     marginBottom: 12,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  cardEmoji: { fontSize: 28, marginBottom: 8 },
   cardTitle: { color: COLORS.black, fontWeight: '600' },
   badge: {
     position: 'absolute',
@@ -302,10 +316,10 @@ const styles = StyleSheet.create({
 
   /* Recently played */
   recentHeaderRow: { flexDirection: 'row', alignItems: 'center', marginTop: 8 },
-  recentHeader: { color: COLORS.cream, fontWeight: '700', fontSize: 16 },
+  recentHeader: { color: COLORS.primary, fontWeight: '700', fontSize: 16 },
   divider: {
     height: 1,
-    backgroundColor: COLORS.gold,
+    backgroundColor: COLORS.accent,
     flex: 1,
     marginLeft: 12,
     opacity: 0.7,
@@ -315,24 +329,24 @@ const styles = StyleSheet.create({
   thumbPlaceholder: {
     height: 90,
     borderRadius: 12,
-    backgroundColor: '#121212',
+    backgroundColor: '#EDEDED',
     borderWidth: 1,
-    borderColor: COLORS.gold,
+    borderColor: COLORS.accent,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  playIcon: { color: COLORS.primary, fontSize: 22 },
+  playIcon: { color: COLORS.highlight, fontSize: 22 },
   durationPill: {
     position: 'absolute',
     right: 6,
     bottom: 6,
-    backgroundColor: COLORS.gold,
+    backgroundColor: COLORS.highlight,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 6,
   },
-  durationText: { fontSize: 10, color: COLORS.black, fontWeight: '700' },
-  recentTitle: { color: COLORS.cream, marginTop: 6, fontSize: 12 },
+  durationText: { fontSize: 10, color: COLORS.white, fontWeight: '700' },
+  recentTitle: { color: '#333333', marginTop: 6, fontSize: 12 },
 
   /* FAB */
   fab: {
