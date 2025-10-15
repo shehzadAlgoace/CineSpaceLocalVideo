@@ -198,7 +198,7 @@ const Spinner: React.FC<Props> = ({
       const segEnd = segStart + segAngle;
       const start = segStart + gapDeg / 2;
       const end = segEnd - gapDeg / 2;
-      const fill = i % 2 === 0 ? UI.sliceDark : UI.sliceLight;
+      const fill = i % 2 === 0 ? '#F1F2F3' : 'rgba(131, 145, 161, 1)';
       const path = tapered
         ? roundedWedgePath(
             radius,
@@ -286,7 +286,7 @@ const Spinner: React.FC<Props> = ({
                 cx={radius}
                 cy={radius}
                 r={radius - 2}
-                fill={UI.shadow}
+                fill={'red'}
                 opacity={0.24}
               />
               {/* outer rim (thicker) */}
@@ -294,9 +294,9 @@ const Spinner: React.FC<Props> = ({
                 cx={radius}
                 cy={radius}
                 r={radius - 4}
-                fill={UI.bg}
-                stroke={UI.ringStroke}
-                strokeWidth={4}
+                fill={'white'}
+                stroke={'white'}
+                strokeWidth={8}
               />
               {/* outer rim highlight */}
               <Circle
@@ -309,16 +309,21 @@ const Spinner: React.FC<Props> = ({
                 strokeWidth={1.6}
               />
               {/* inner bowl background (white) */}
-              <Circle cx={radius} cy={radius} r={radius * 0.84} fill={UI.bg} />
+              <Circle
+                cx={radius}
+                cy={radius}
+                r={radius * 0.84}
+                fill={'white'}
+              />
               {/* inner bowl subtle edge */}
               <Circle
                 cx={radius}
                 cy={radius}
                 r={radius * 0.84}
                 fill="none"
-                stroke={UI.ringStroke}
+                stroke={'white'}
                 strokeOpacity={0.6}
-                strokeWidth={1.2}
+                strokeWidth={1}
               />
               {/* slices */}
               {slices.map((s, i) => (
@@ -328,7 +333,7 @@ const Spinner: React.FC<Props> = ({
                   <Path
                     d={s.path}
                     fill="none"
-                    stroke="#FFFFFF"
+                    stroke="white"
                     strokeWidth={Math.max(1, radius * 0.015)}
                     strokeLinecap="round"
                     strokeLinejoin="round"
